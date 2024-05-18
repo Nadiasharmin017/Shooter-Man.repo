@@ -1,7 +1,6 @@
 import pygame
 import os
-from pygame.locals import *
-
+# import csv
 pygame.init()
 screen_width = 1000
 screen_height = 700
@@ -13,6 +12,11 @@ clock = pygame.time.Clock()
 FPS = 60
 
 GRAVITY = 0.75
+ROWS = 16
+COLS = 150
+TITLE_SIZE = screen_height // ROWS
+TITLE_TYPES = 21 
+level = 1
 
 # Define player action variables
 moving_left = False
@@ -230,6 +234,17 @@ class Explosion(pygame.sprite.Sprite):
         self.rect.center = (x , y)
         self.counter = 0
 
+    def update(self):
+        EXPLOSION_SPEED = 4
+        #update explotion animition
+        self.counter +=1
+
+        if self.counter >=EXPLOSION_SPEED:
+            self.counter = 0
+            self.frame_index += 1
+            #if  the animation is compelete then delete the explosion
+            self.image = self.image[self.frame_index]    
+
 #crearte sprite group   
 bullet_group = pygame.sprite.Group()
 grenade_group = pygame.sprite.Group()
@@ -239,6 +254,15 @@ explosion_group = pygame.sprite.Group()
 # Instantiate player and enemy soldiers
 player = Soldier('player', 200, 200, 3, 5,20, 5)
 enemy = Soldier('enemy', 400, 200, 3, 5,20, 0)
+
+#create empty tile list
+world_data = []
+for row in range(ROWS):
+    r = [-1] * COLS
+    world_data.append(r)
+print(world_data)
+#load in  level  data and  create world 
+# print(r)
 
 run = True
 while run:
